@@ -1,0 +1,30 @@
+//https://leetcode.com/problems/longest-increasing-subsequence/submissions/
+
+class Solution {
+public:
+    int dpsol(vector<int>& nums,int start,int prev,vector<int> &dp){
+        
+        int include=1,exclude=0;
+        if(dp[prev]!=-1){
+            return dp[prev];
+        }
+        for(int i=start; i<nums.size(); i++){
+            if(nums[i]>nums[prev]){
+                include = 1+dpsol(nums,i+1,i,dp);
+                exclude = dpsol(nums,i+1,prev,dp);
+                break;
+            }
+        }
+        return dp[prev]= max(include,exclude);
+    }
+    int lengthOfLIS(vector<int>& nums) {
+        int mx=1;
+        int n = nums.size();
+        vector<int> dp(n+1,-1);
+        for(int j=0; j<nums.size(); j++){
+            
+           mx = max(mx, dpsol(nums,j,j,dp));
+        }
+        return mx;
+    }
+};
